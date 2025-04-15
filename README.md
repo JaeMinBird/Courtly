@@ -6,7 +6,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 1. Download & install [Node.js](https://nodejs.org/)
 
-2. Run the following command in terminal:
+2. Run the following command in terminal
 ```bash
 npx create-next-app@latest your_ project_name --typescript --eslint --app
 ```

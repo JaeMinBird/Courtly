@@ -75,3 +75,127 @@ To learn more about Next.js, take a look at the following resources:
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Courtly
+
+A modern full-stack platform to manage court reservations and private lesson bookings for racquet sports facilities. Designed to support multiple locations, member accounts, coach scheduling, and lesson package purchases.
+
+---
+
+## 🧠 Background
+
+Racquet sports like tennis, pickleball, and squash are growing in popularity, putting pressure on facilities to manage reservations more efficiently. This project aims to provide a modern, scalable system to:
+
+- Reserve courts by time slots
+- Book private lessons with coaches
+- Support lesson package bundles
+- Handle multiple locations and user roles (Admin, Coach, Member)
+
+---
+
+## 🚀 Tech Stack
+
+- **Frontend**: React + Next.js (App Router)
+- **Styling**: Tailwind CSS, shadcn/ui
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL (hosted via Neon/Supabase)
+- **ORM**: Prisma
+- **Auth**: NextAuth.js (role-based)
+- **Deployment**: Vercel
+
+---
+
+## 🧱 Architecture Overview
+
+### Key Components
+
+- **Auth Service**: Role-based auth (Admin, Coach, Member)
+- **Reservation Service**: Court & lesson bookings
+- **Coach Service**: Availability and profiles
+- **Admin Service**: Facility and package configuration
+
+### Data Model Highlights
+
+- `User`, `Location`, `Court`, `Reservation`
+- `CoachProfile`, `CoachAvailability`
+- `LessonPackage`, `MemberPackage`, `LessonBooking`
+
+---
+
+## 📆 Booking Flows
+
+### Court Reservation
+1. Member selects sport + location
+2. Views court availability
+3. Confirms booking → saved in `Reservation`
+
+### Private Lesson
+1. Member views coach availability
+2. Selects package (if available)
+3. Books → lesson deducted from `MemberPackage`
+
+---
+
+## 📦 Lesson Packages
+
+- Members can purchase bundles (e.g., 5 lessons)
+- Packages may expire (e.g., 60 days)
+- Multiple packages supported per member
+- Bookings deduct from earliest valid package
+
+---
+
+## 🛠️ Implementation Plan
+
+### Milestones
+
+1. **Setup**: Project scaffolding, DB, Vercel config
+2. **Auth**: NextAuth with roles
+3. **Admin: Facilities & Courts**
+4. **Coaches & Lesson Packages**
+5. **Booking Logic**: Courts + Lessons
+6. **Member Dashboard**
+7. **Notifications + QA**
+8. **Go-Live**: Seed data, deploy
+
+---
+
+## 👥 Team Collaboration Plan (2 Devs)
+
+### Developer A – *Backend & Logic*
+- DB Schema (Prisma)
+- API Routes
+- Auth System
+- Booking Rules (court & lesson)
+- Testing + Seeding
+
+### Developer B – *Frontend & UI*
+- Next.js pages + routes
+- Admin & Member Dashboards
+- Booking UI
+- Package Management UI
+- Email UX & Polishing
+
+### Shared Tasks
+- Booking flow integration
+- Manual testing
+- Production readiness
+
+---
+
+## ✅ Done Criteria
+
+- Users can log in and manage bookings
+- Admins can configure courts, coaches, and packages
+- Members can book courts and lessons using packages
+- Booking conflicts are prevented
+- Deployed and functional on Vercel
+
+---
+
+## 🧪 Future Enhancements
+
+- Payment integration (Stripe)
+- Mobile-native app
+- Waitlists & advanced rescheduling
+- Usage analytics dashboard

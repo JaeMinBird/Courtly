@@ -91,7 +91,7 @@ Racquet sports like tennis, pickleball, and squash are growing in popularity, pu
 - Support lesson package bundles
 - Handle multiple locations and user roles (Admin, Coach, Member)
 
----
+--
 
 ## 🚀 Tech Stack
 

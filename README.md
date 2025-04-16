@@ -199,3 +199,86 @@ Racquet sports like tennis, pickleball, and squash are growing in popularity, pu
 - Mobile-native app
 - Waitlists & advanced rescheduling
 - Usage analytics dashboard
+
+## 🗃️ Database Architecture & API
+
+### Database Schema
+
+Courtly uses Supabase (PostgreSQL) as its database backend with the following core tables:
+
+#### User Management
+- `users`: Extends Supabase Auth with profile data and role-based access (Admin, Coach, Member)
+- `coach_profiles`: Additional details for users with the Coach role including experience, rates, and specialties
+
+#### Facility Management
+- `locations`: Physical facilities with address information
+- `courts`: Individual courts within locations, categorized by sport type
+- `coach_availability`: Weekly recurring availability slots for coaches
+
+#### Booking System
+- `court_reservations`: Court bookings with start/end times
+- `lesson_bookings`: Private lessons with coaches
+- `lesson_packages`: Templates for purchasable lesson bundles
+- `member_packages`: Purchased packages with remaining lesson counts and expiry dates
+
+#### Key Features
+- **Row-Level Security (RLS)**: Database-level security ensures users can only access appropriate data
+- **Timestamps**: All tables include created_at/updated_at fields with automatic maintenance
+- **Referential Integrity**: Foreign key constraints maintain data consistency
+- **Indexing**: Strategic indexes on frequently queried columns for performance
+
+### API Structure
+
+The application uses Next.js API routes organized by domain:
+
+#### Authentication
+- `POST /api/auth`: Handle sign-up, sign-in, and sign-out operations
+- Leverages Supabase Auth with JWT tokens
+
+#### Locations & Courts
+- `GET /api/locations`: List all facilities
+- `GET /api/locations/:id`: Details for a specific location
+- `GET /api/courts?locationId=x`: Courts filtered by location
+- `POST /api/courts`: Create new courts (admin only)
+
+#### Reservations
+- `GET /api/reservations?userId=x`: View user's court reservations
+- `POST /api/reservations`: Create new reservation
+- `PUT /api/reservations/:id`: Update reservation status
+
+#### Coaches & Lessons
+- `GET /api/coaches`: List available coaches
+- `GET /api/coaches/:id/availability`: Coach's schedule
+- `POST /api/lessons`: Book a lesson with a coach
+- `GET /api/packages`: Available lesson packages for purchase
+
+### Data Access Patterns
+
+The application uses a custom API client with typed endpoints:
+
+```typescript
+// Example: Fetch available courts at a location
+const courts = await apiClient.getCourts(locationId);
+
+// Example: Create a reservation
+const reservation = await apiClient.createReservation({
+  court_id: courtId,
+  user_id: currentUser.id,
+  start_time: selectedSlot.start,
+  end_time: selectedSlot.end
+});
+```
+
+### Security Model
+
+- **Authentication**: JWT-based auth through Supabase
+- **Authorization**: Role-based access control (RBAC) at both API and database levels
+- **Data Isolation**: Row-level security policies ensure users can only view/modify their own data
+- **API Validation**: Request validation at the API level prevents invalid data
+
+### Overlap Prevention
+
+Booking conflicts are prevented through application logic:
+1. Before creating a reservation, check for existing bookings in the same time slot
+2. For lessons, verify coach availability and court availability in the requested time slot
+3. Provide clear feedback to users when conflicts exist
